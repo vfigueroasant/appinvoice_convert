@@ -55,7 +55,7 @@ def main():
     
 # Agregar una imagen al sidebar
 
-
+    st.sidebar.image('fact.jpg')
 
     st.sidebar.header("Configuración")
 
