@@ -27,6 +27,9 @@ def process_data(text, divisor):
                 itbis = float(columns[-2].replace(',', ''))
                 importe = float(columns[-1].replace(',', ''))
 
+                # Generar la nomenclatura de la descripción
+                nomenclatura = "".join([word[0] for word in descripcion.split()])
+
                 # 1. Dividir el precio por el divisor
                 nuevo_precio = precio / divisor
 
@@ -36,8 +39,8 @@ def process_data(text, divisor):
                 # 3. Calcular el ITBIS (nuevo importe * 0.18)
                 nuevo_itbis = nuevo_importe * 0.18
 
-                # Añadimos los datos en el orden correcto
-                data.append([codigo, descripcion, nuevo_precio, cantidad, nuevo_importe, nuevo_itbis])
+                # Añadimos los datos en el orden correcto, usando la nomenclatura para el código
+                data.append([nomenclatura, descripcion, cantidad, nuevo_precio, nuevo_importe, nuevo_itbis])
             except ValueError:
                 # Si hay un error al convertir a float, continuamos con la siguiente línea
                 continue
@@ -45,7 +48,7 @@ def process_data(text, divisor):
 
 # Función para crear un DataFrame y exportarlo a Excel
 def create_excel(data, output_path):
-    df = pd.DataFrame(data, columns=["CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "IMPORTE", "ITBIS"])
+    df = pd.DataFrame(data, columns=["CODIGO", "DESCRIPCION", "CANTIDAD", "PRECIO", "IMPORTE", "ITBIS"])
     df.to_excel(output_path, index=False)
 
 # Interfaz gráfica con Streamlit
@@ -70,7 +73,7 @@ def main():
         
         if data:
             st.subheader("Datos Procesados")
-            df = pd.DataFrame(data, columns=["CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "IMPORTE", "ITBIS"])
+            df = pd.DataFrame(data, columns=["CODIGO", "DESCRIPCION", "CANTIDAD", "PRECIO", "IMPORTE", "ITBIS"])
             st.write(df)
             
             if st.button("Procesar y exportar a Excel"):
